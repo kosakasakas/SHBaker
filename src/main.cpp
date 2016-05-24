@@ -2,12 +2,16 @@
 #include "ofApp.h"
 
 //========================================================================
-int main( ){
-	ofSetupOpenGL(1024,768,OF_WINDOW);			// <-------- setup the GL context
-
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp(new ofApp());
-
+int main( )
+{
+    ofGLWindowSettings settings;
+    
+    // 自分のMacBookProのサポートVerである4.1を入れておく
+    settings.setGLVersion(4,1);
+    settings.width  = 1024;
+    settings.height = 512;
+    
+    ofCreateWindow(settings);
+    
+    ofRunApp(new ofApp());
 }
