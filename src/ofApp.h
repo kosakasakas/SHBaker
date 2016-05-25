@@ -29,5 +29,12 @@ private:
     ofShader    m_Shader;
     
     //! 球面調和関数LookUpテクスチャ
-    ofImage     m_SHTex;
+    ofTexture     m_SHTex;
+    ofImage       m_SHImage;
+    
+    //!
+    unsigned char* m_pSHTexBuffer;
+    
+    int m_Width;
+    int m_Height;
 };

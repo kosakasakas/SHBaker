@@ -23,19 +23,18 @@ using namespace Kosakasakas;
 float KSSphericalHarmonics::Calc(int l, int m, float theta, float phi)
 {
     float sf    = CalcScalingFactor(l, m);
-    float lp    = CalcLegendrePolynomials(l, m, cosf(theta));
     
     if (0 < m)
     {
-        sf *= sqrtf(2.0f) * cosf(m * phi) * lp;
+        sf *= sqrtf(2.0f) * cosf(m * phi) * CalcLegendrePolynomials(l, m, cosf(theta));;
     }
     else if (m < 0)
     {
-        sf *= sqrtf(2.0f) * sinf(-m * phi) * lp;
+        sf *= sqrtf(2.0f) * sinf(-m * phi) * CalcLegendrePolynomials(l, -m, cosf(theta));;
     }
     else
     {
-        sf *= lp;
+        sf *= CalcLegendrePolynomials(l, m, cosf(theta));;
     }
     
     return sf;
