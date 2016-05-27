@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "KSSphericalHarmonicsTextureMaker.h"
 
 class ofApp : public ofBaseApp
 {
@@ -30,11 +31,9 @@ private:
     
     //! 球面調和関数LookUpテクスチャ
     ofTexture     m_SHTex;
-    ofImage       m_SHImage;
+    ofImage m_Test;
+    ofPlanePrimitive m_p;
+    ofFbo   m_FBO;
     
-    //!
-    unsigned char* m_pSHTexBuffer;
-    
-    int m_Width;
-    int m_Height;
+    Kosakasakas::KSSphericalHarmonicsTextureMaker   m_SHTexMaker;
 };

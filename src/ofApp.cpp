@@ -1,5 +1,4 @@
 #include "ofApp.h"
-#include "KSSphericalHarmonics.h"
 
 using namespace Kosakasakas;
 
@@ -14,33 +13,26 @@ void ofApp::setup(){
     // シェーダのロード
     m_Shader.load("test.vert", "test.frag");
     
-    // テクスチャのセット
-    m_Width   = 512;
-    m_Height  = 512;
-    int l   = 1;
-    int m   = -1;
-    float wSize = 2.0f * PI / (float)m_Width;
-    float hSize = 2.0f * PI / (float)m_Height;
-    m_pSHTexBuffer  = new unsigned char[4 * m_Width * m_Height];
-    for (int w = 0; w < m_Width; ++w)
-    {
-        for (int h = 0; h < m_Height; ++h)
-        {
-            float theta = w * wSize;
-            float phi   = h * hSize;
-            float val   = KSSphericalHarmonics::Calc(l, m, theta, phi);
-            // R
-            m_pSHTexBuffer[4 * (m_Width * h + w) + 0] = MAX(-val * 255.0f, 0.0f);
-            // G
-            m_pSHTexBuffer[4 * (m_Width * h + w) + 1] = MAX(val * 255.0f, 0.0f);
-            // B
-            m_pSHTexBuffer[4 * (m_Width * h + w) + 2] = 0;
-            // A
-            m_pSHTexBuffer[4 * (m_Width * h + w) + 3] = 255;
-        }
-    }
+    KSSphericalHarmonicsTextureParam param;
+    param.m_Width       = 512;
+    param.m_Height      = 512;
+    param.m_MaxBandID   = 1;
+    m_SHTexMaker.Initialize(param);
     
-    m_SHTex.loadData(m_pSHTexBuffer, m_Width, m_Height, GL_RGBA);
+    auto texVec = m_SHTexMaker.GetTextureBufferPtrVec();
+    
+    //m_Test.load("kosakasakas.jpg");
+    ofDisableArbTex();
+    // note that we disable arb tex, meaning we will use normalized texture coordinates,
+    // where a texture's x and y coordinate are each expressed as a normalized float.
+    // this makes things slightly easier in the shader.
+    // と言うことらしいので、Disableしとく
+    //ofLoadImage(m_SHTex, "ps.png");
+    m_SHTex.loadData(texVec[0]->GetData(), m_SHTexMaker.GetWidth(), m_SHTexMaker.GetHeight(), GL_RGBA);
+    ofEnableArbTex();
+    
+    //m_Sphere.mapTexCoordsFromTexture(m_SHTex);
+    m_FBO.allocate(400, 400, GL_RGBA);
 }
 
 //--------------------------------------------------------------
@@ -55,6 +47,11 @@ void ofApp::draw(){
     float spinY = cos(ofGetElapsedTimef()*.075f);
     
     ofEnableDepthTest();
+    ofDisableAlphaBlending();
+    
+    m_FBO.begin();
+    ofSetColor(0,0,255,255);
+    m_FBO.end();
     
     // 球のセットアップ
     m_Sphere.setPosition(ofGetWidth() * 0.25f, ofGetHeight() * 0.5f, 0.0f);
@@ -63,11 +60,18 @@ void ofApp::draw(){
     
     // テクスチャのセットアップ
     m_SHTex.draw(ofGetWidth() * 0.5f, 0);
+    //m_Test.draw(ofGetWidth() * 0.5f, 0);
     
+    //m_SHTex.bind(0);
     // 球体の描画
     m_Shader.begin();
+    //m_Shader.setUniformTexture("u_textureA", m_SHTex, 0);
+    m_Shader.setUniformTexture("tex0", m_SHTex, 0);
     m_Sphere.draw();
+    m_p.draw();
     m_Shader.end();
+    
+    //m_SHTex.unbind(0);
 }
 
 //--------------------------------------------------------------
