@@ -36,6 +36,7 @@ namespace Kosakasakas {
         virtual ~KSSphericalHarmonicsTextureMaker();
         bool    Initialize(KSSphericalHarmonicsTextureParam& param);
         void    Finalize();
+        bool    DrawTex();
         
         typedef std::shared_ptr<KSSHTextureBuffer>      TextureBufferPtr;
         typedef std::vector<TextureBufferPtr>           TextureBfferPtrVec;
@@ -54,6 +55,7 @@ namespace Kosakasakas {
         {
             return m_Param.m_Height;
         }
+        
         
         static int CalcBasisNum(int bandID);
     private:

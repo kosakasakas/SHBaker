@@ -20,5 +20,6 @@ void main()
     mat3 NMat = transpose(inverse(mv3)); 
     o_normal    = NMat * normal.rgb;
     o_texcoord  = texcoord;
+    o_normal    = normal.rgb;
 }
 

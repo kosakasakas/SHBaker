@@ -33,15 +33,22 @@ bool    KSSphericalHarmonicsTextureMaker::Initialize(KSSphericalHarmonicsTexture
     
     m_TextureBufferPtrVec.resize(m_TexNum);
     
-    float wSize = 2.0f * M_PI / (float) param.m_Width;
-    float hSize = 2.0f * M_PI / (float) param.m_Height;
+    m_Param = param;
+    
+    return true;
+}
+
+bool    KSSphericalHarmonicsTextureMaker::DrawTex()
+{
+    float wSize = M_PI / (float) m_Param.m_Width;
+    float hSize = M_PI / (float) m_Param.m_Height;
     for (int i = 0; i < m_TexNum; ++i)
     {
         // テクスチャの初期化
         auto pTexBuffer = std::make_shared<KSSHTextureBuffer>();
-        if (!pTexBuffer->Initialize(param.m_Width,
-                                    param.m_Height,
-                                    param.m_MaxBandID,
+        if (!pTexBuffer->Initialize(m_Param.m_Width,
+                                    m_Param.m_Height,
+                                    m_Param.m_MaxBandID,
                                     i))
         {
             return false;
@@ -49,12 +56,15 @@ bool    KSSphericalHarmonicsTextureMaker::Initialize(KSSphericalHarmonicsTexture
         
         // カラーデータを実際に入れる
         unsigned char* pData    = pTexBuffer->GetDataRef();
-        for (int w=0, nw=param.m_Width; w<nw; ++w)
+        for (int w=0, nw=m_Param.m_Width; w<nw; ++w)
         {
-            for (int h=0,nh=param.m_Height; h<nh; ++h)
+            for (int h=0,nh=m_Param.m_Height; h<nh; ++h)
             {
-                float theta = w * wSize;
-                float phi   = h * hSize;
+                // 0 ~ PI の範囲のテクスチャを作る
+                //float theta = w * wSize;
+                //float phi   = h * hSize;
+                float phi = (float)h * 2.0f * M_PI / nh;
+                float theta = (float)w * M_PI / nw;
                 
                 int alpha = 0;
                 for(int c = 0; c < 3; ++c)
@@ -62,13 +72,13 @@ bool    KSSphericalHarmonicsTextureMaker::Initialize(KSSphericalHarmonicsTexture
                     int l, m;
                     pTexBuffer->GetSHBaseIDsByChannel(l, m, c);
                     
-                    float val   = KSSphericalHarmonics::Calc(l, m, theta, phi);
+                    float val   = KSSphericalHarmonics::Calc(1, -1, theta, phi);
                     
-                    pData[4 * (nw * h + w) + c] = val * 255;
+                    pData[4 * (nw * h + w) + c] = ((val > 0) ? val : -val) * 255;
                     
                     // RGBの精度を落とさないため、alphaに符号情報を入れておく
                     // 正なら1、負なら0で2^3=8階調のどれかがalphaに入る.
-                    if (val)
+                    if (val>0)
                     {
                         alpha += pow(2, c);
                     }
@@ -77,12 +87,8 @@ bool    KSSphericalHarmonicsTextureMaker::Initialize(KSSphericalHarmonicsTexture
                 pData[4 * (nw * h + w) + 3] = alpha;
             }
         }
-        
         m_TextureBufferPtrVec[i]    = pTexBuffer;
     }
-    
-    m_Param = param;
-    
     return true;
 }
 

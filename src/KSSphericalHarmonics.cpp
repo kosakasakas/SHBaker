@@ -34,7 +34,7 @@ float KSSphericalHarmonics::Calc(int l, int m, float theta, float phi)
     }
     else
     {
-        sf *= CalcLegendrePolynomials(l, m, cosf(theta));;
+        sf *= CalcLegendrePolynomials(l, m, cosf(theta));
     }
     
     return sf;
@@ -46,12 +46,12 @@ float KSSphericalHarmonics::CalcScalingFactor(int l, int m)
     float lnm = 1.0f;
     if(m < 0) m = -m;
     
-    for (int i = l-m; 0 < i; --i)
+    for (int i = (l-m); 0 < i; i--)
     {
         lnm *= i;
     }
     
-    for (int i = l+m; 0 < i; --i)
+    for (int i = (l+m); 0 < i; i--)
     {
         lpm *= i;
     }
