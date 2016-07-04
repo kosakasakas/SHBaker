@@ -42,6 +42,10 @@ bin/data/image/spherical_harmonics_*.pngが該当のデータです.
         outputColor = vec4(val, 1.0);
     }
 
+# 動作確認環境
+El capitan OS X 10.11.5
+openFrameworks v0.9.3
 
-
+# ライセンス
+このソフトウェアは、[Mozilla Public License Version 2.0](http://mozilla.org/MPL/2.0/)ライセンスで公開しています。
 
