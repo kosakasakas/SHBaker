@@ -1,7 +1,7 @@
 # SHBaker
 球面調和関数のlookupテクスチャの生成ツールです.
 
-!(screenshot)[image/screenshot.png]
+![screenshot](image/screenshot.png)
 
 一枚につき三つ分の球面調和関数のルックアップデータを格納したテクスチャを生成します.(RGBに符号なしデータ、Aに各チャンネルの符号bit)
 デフォルトでは4枚分のテクスチャが生成されます.
