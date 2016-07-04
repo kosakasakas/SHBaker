@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
-#include "KSSphericalHarmonicsTextureMaker.h"
+#include <string>
 
 class ofApp : public ofBaseApp
 {
@@ -24,15 +24,25 @@ public:
     
 private:
     //! 球体オブジェクト
-    ofIcoSpherePrimitive m_Sphere;
+    ofIcoSpherePrimitive    m_Sphere;
+    //! デバッグ用スクリーン
+    ofPlanePrimitive        m_Plane;
     
     //! シェーダオブジェクト
     ofShader    m_Shader;
+    //!
+    ofShader    m_ShaderDebugSHTex;
     
-    //! 球面調和関数LookUpテクスチャ
-    ofTexture     m_SHTex;
-    ofImage m_Tes;
+    //! SHテクスチャのマップ
+    std::vector<ofTexture> m_SHTexVec;
     
-    //! 球面調和関数メーカー
-    Kosakasakas::KSSphericalHarmonicsTextureMaker   m_SHTexMaker;
+    //! デバッグ用カラー表示フラグ
+    bool    m_bDebug;
+    
+    //! オフスクリーンレンダリング用のバッファ
+    ofFbo   m_Fbo;
+    std::vector<ofFbo>  m_FboSHVec;
+    
+    //! カメラ
+    ofCamera    m_Camera;
 };

@@ -1,5 +1,5 @@
 //
-//  KSSphericalHarmonics.h
+//  KsSphericalHarmonics.h
 //
 //  球面調和関数の演算を行うクラス
 //
@@ -10,7 +10,7 @@
 //  Public License v. 2.0. If a copy of the MPL was not distributed
 //  with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-#include "KSSphericalHarmonics.h"
+#include "KsSphericalHarmonics.h"
 #include <math.h>
 
 namespace Kosakasakas
@@ -20,17 +20,18 @@ namespace Kosakasakas
 
 using namespace Kosakasakas;
 
-float KSSphericalHarmonics::Calc(int l, int m, float theta, float phi)
+//! 球面調和関数の計算結果の取得
+float KsSphericalHarmonics::Calc(int l, int m, float theta, float phi)
 {
     float sf    = CalcScalingFactor(l, m);
     
     if (0 < m)
     {
-        sf *= sqrtf(2.0f) * cosf(m * phi) * CalcLegendrePolynomials(l, m, cosf(theta));;
+        sf *= sqrtf(2.0f) * cosf(m * phi) * CalcLegendrePolynomials(l, m, cosf(theta));
     }
     else if (m < 0)
     {
-        sf *= sqrtf(2.0f) * sinf(-m * phi) * CalcLegendrePolynomials(l, -m, cosf(theta));;
+        sf *= sqrtf(2.0f) * sinf(-m * phi) * CalcLegendrePolynomials(l, -m, cosf(theta));
     }
     else
     {
@@ -40,7 +41,8 @@ float KSSphericalHarmonics::Calc(int l, int m, float theta, float phi)
     return sf;
 }
 
-float KSSphericalHarmonics::CalcScalingFactor(int l, int m)
+//! スケールファクタを取得
+float KsSphericalHarmonics::CalcScalingFactor(int l, int m)
 {
     float lpm = 1.0f;
     float lnm = 1.0f;
@@ -59,7 +61,8 @@ float KSSphericalHarmonics::CalcScalingFactor(int l, int m)
     return sqrtf(((2.0f * l + 1.0f) * lnm) / (4.0f * PI * lpm));
 }
 
-float KSSphericalHarmonics::CalcLegendrePolynomials(int l, int m, float x)
+//! LegendrePolynomialsの取得
+float KsSphericalHarmonics::CalcLegendrePolynomials(int l, int m, float x)
 {
     float pmm = 1.0f;
     

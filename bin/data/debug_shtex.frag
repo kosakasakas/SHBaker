@@ -1,14 +1,11 @@
 #version 410
 
-in vec3 o_normal;
 in vec2 o_texcoord;
-in vec2 o_texcoordSH;
-
-uniform sampler2D    u_SHTex;
-uniform int          u_Channel;
-uniform vec2         u_PixelSize;
 
 out vec4 outputColor;
+
+uniform sampler2D u_SHTex;
+uniform int u_Channel;
 
 const float PI = 3.141592653589793238462643383;
 
@@ -24,7 +21,7 @@ vec3    GetSignConvertVec(float val)
 
 void main()
 {
-    vec4 col    = texture(u_SHTex, o_texcoordSH);
+    vec4 col    = texture(u_SHTex, o_texcoord);
     vec3 sign   = GetSignConvertVec(col.a);
     col.rgb     = sign * col.rgb;
     float sh    = (u_Channel == 0) ? col.r
